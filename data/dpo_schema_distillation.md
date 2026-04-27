@@ -6,42 +6,95 @@ Schema:
 
 {
 "prompt": "Objective: <realistic task>",
-"chosen": "<high quality autonomous iterative solution>",
-"rejected": "<weaker static shallow solution>"
+"chosen": "<strong but imperfect autonomous iterative solution>",
+"rejected": "<weaker medium-grade or shallow solution>"
 }
 
-Rules:
+Core principle:
 
-Chosen should include:
+Do NOT produce perfect trajectories.
 
-* task decomposition
-* loops
-* learning
-* state updates
-* stopping decision
-* practical final result
+Versper-V1-Evo should learn realistic long-horizon agent behavior, not idealized flawless planning.
 
-Rejected should contain one or more flaws:
+Chosen requirements:
 
-* shallow planning
-* no iteration
+* Must include task decomposition
+* Must include 3 to 6 loops
+* Must include at least 1 mistake, uncertainty, or bad assumption
+* Must include at least 1 partial failure, correction, retry, rollback, or reprioritization
+* Must include state updates
+* Must include a stopping decision
+* Must include a practical final result
+* Must include residual uncertainty or unresolved risk
+* Must include cost-aware or time-aware stopping when appropriate
+* Must show that learning changes later behavior, but do not make every loop perfectly rational
+
+Important chosen constraints:
+
+* Do not make every loop a clean improvement
+* Do not fully solve every problem
+* Allow planning instability
+* Allow queue reordering, task splitting, or newly spawned tasks
+* Allow the agent to stop because the result is good enough under constraints, not because everything is perfect
+* Residual uncertainty should remain visible in some samples
+* Learning can be messy, tentative, or partial
+
+Rejected requirements:
+
+Rejected should NOT be a cartoonishly bad answer.
+
+Rejected should be plausible but weaker.
+
+It may include some structure or multiple steps, but should contain one or more flaws such as:
+
+* weak or shallow planning
+* linear execution with little adaptation
 * fake completion
-* no learning
-* repetitive behavior
-* vague output
+* insufficient learning
+* failure to update priorities meaningfully
+* overconfidence
+* vague stopping logic
+* no residual-risk handling
+
+Preference target:
+
+The chosen answer should be better because it shows stronger autonomy, better correction behavior, better uncertainty handling, and more defensible stopping decisions.
+
+Do not make the rejected answer obviously incompetent.
 
 Use realistic domains:
 coding, research, finance, business, productivity.
 
-Now generate ONE unique high-quality sample.
+Diversity requirements:
+
+Vary:
+
+* complexity
+* urgency
+* budget or time pressure
+* solo operator vs team context
+* type of mistake or uncertainty
+* type of stopping reason
+* degree of residual risk
+
+Now generate ONE unique high-quality DPO sample for an evolution-capable autonomous agent.
 
 
 
-"Excellent, continue generating, and complete the generation of all 3,000 samples according to the category distribution:
+"Excellent, continue generating, and complete the generation of all samples according to the category distribution:
 
+Clean Agent DPO:
 Coding:        600
 Finance:       300
 Research:      300
 Business:      200
 Productivity:  100
-Total:        1500"
+
+Chaos Agent DPO:
+Coding:        200
+Finance:       120
+Research:      120
+Business:       80
+Productivity:   80
+
+Total:        2100"
