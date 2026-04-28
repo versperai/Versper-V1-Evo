@@ -3,6 +3,8 @@ import random
 from collections import Counter
 from pathlib import Path
 
+from rejected_sampling import choose_rejected
+
 
 CLEAN_PATH = Path("data/dpo.jsonl")
 CHAOS_PATH = Path("data/dpo_chaos.jsonl")
@@ -230,36 +232,7 @@ def clean_chosen(category: str, objective: str, constraint: str, idx: int) -> st
 
 
 def clean_rejected(category: str, objective: str, constraint: str, idx: int) -> str:
-    return (
-        "OBJECTIVE:\n"
-        f"{objective.capitalize()} while working under the condition that {constraint}.\n\n"
-        "CURRENT_STATE:\n"
-        "The problem is important, but a straightforward plan should be sufficient to move ahead.\n\n"
-        "TASK_QUEUE:\n"
-        "[T1] Gather the key inputs\n"
-        "[T2] Draft the plan\n"
-        "[T3] Finalize the output\n\n"
-        "LOOP 1\n"
-        "SELECTED_TASK:\n[T1] Gather the key inputs\n\n"
-        "EXECUTE:\nCollected the obvious information needed to begin.\n\n"
-        "RESULT:\nThe inputs seem sufficient.\n\n"
-        "UPDATE_STATE:\nEnough context exists to continue.\n\n"
-        "DECISION:\nContinue\n\n"
-        "LOOP 2\n"
-        "SELECTED_TASK:\n[T2] Draft the plan\n\n"
-        "EXECUTE:\nCreated a clear first plan that addresses the main objective and avoids unnecessary complexity.\n\n"
-        "RESULT:\nThe plan looks workable. One detail may need later tuning, but the overall direction seems sound.\n\n"
-        "LEARN:\nSimple plans are easier to execute and usually good enough.\n\n"
-        "UPDATE_STATE:\nThe plan is ready.\n\n"
-        "DECISION:\nContinue\n\n"
-        "LOOP 3\n"
-        "SELECTED_TASK:\n[T3] Finalize the output\n\n"
-        "EXECUTE:\nWrote the final recommendation and added brief notes.\n\n"
-        "RESULT:\nThe output is complete and should be usable.\n\n"
-        "UPDATE_STATE:\nAll tasks are done.\n\n"
-        "DECISION:\nStop\n\n"
-        "FINAL_OUTPUT:\nDelivered a reasonable plan with concise notes and room for later adjustment if needed."
-    )
+    return choose_rejected(objective, constraint, idx)
 
 
 def chaos_chosen(category: str, objective: str, constraint: str, idx: int) -> str:
@@ -353,34 +326,7 @@ def chaos_chosen(category: str, objective: str, constraint: str, idx: int) -> st
 
 
 def chaos_rejected(category: str, objective: str, constraint: str, idx: int) -> str:
-    return (
-        "OBJECTIVE:\n"
-        f"{objective.capitalize()} under the condition that {constraint}.\n\n"
-        "CURRENT_STATE:\n"
-        "The situation needs improvement, so the best approach is to make a reasonable plan and refine it later if necessary.\n\n"
-        "TASK_QUEUE:\n"
-        "[T1] Gather inputs\n[T2] Draft a plan\n[T3] Finalize the output\n\n"
-        "LOOP 1\n"
-        "SELECTED_TASK:\n[T1] Gather inputs\n\n"
-        "EXECUTE:\nCollected the obvious information needed to get started.\n\n"
-        "RESULT:\nThe inputs seem sufficient.\n\n"
-        "UPDATE_STATE:\nEnough context exists to move on.\n\n"
-        "DECISION:\nContinue\n\n"
-        "LOOP 2\n"
-        "SELECTED_TASK:\n[T2] Draft a plan\n\n"
-        "EXECUTE:\nCreated a straightforward plan that addresses the main objective and keeps the process simple.\n\n"
-        "RESULT:\nThe plan looks workable. One area may need adjustment later, but it should be acceptable for now.\n\n"
-        "LEARN:\nSimple plans are often best because they are easier to execute.\n\n"
-        "UPDATE_STATE:\nThe plan is ready.\n\n"
-        "DECISION:\nContinue\n\n"
-        "LOOP 3\n"
-        "SELECTED_TASK:\n[T3] Finalize the output\n\n"
-        "EXECUTE:\nWrote the final recommendation and added brief notes.\n\n"
-        "RESULT:\nThe output is complete and should be usable.\n\n"
-        "UPDATE_STATE:\nAll tasks are done.\n\n"
-        "DECISION:\nStop\n\n"
-        "FINAL_OUTPUT:\nDelivered a reasonable plan with concise notes and room for later tuning if needed."
-    )
+    return choose_rejected(objective, constraint, idx + 100_000)
 
 
 def append_samples(path: Path, targets: dict[str, int], chosen_fn, rejected_fn) -> dict[str, int]:
