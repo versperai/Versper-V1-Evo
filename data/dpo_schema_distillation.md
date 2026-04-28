@@ -98,3 +98,6 @@ Business:       80
 Productivity:   80
 
 Total:        2100"
+
+
+数据量够了，但是你用 脚本 排列组合填充 dpo.jsonl  dpo_chaos.jsonl  sft.jsonl 里的数据 会导致 太集中不符合自然 数据的正态分布，而且 质量也不如你 思考生成出来的数据质量高, 你一条条数据 提高质量
