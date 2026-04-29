@@ -107,7 +107,7 @@ trainer = ORPOTrainer(
         # =========================
         # 🚀 training scale
         # =========================
-        max_steps=3000,
+        max_steps=3125,
         bf16=True,
         output_dir="./orpo_output",
     ),

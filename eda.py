@@ -63,7 +63,7 @@ print("rejected avg:", np.mean(rejected_lens))
 # =========================
 # 3️⃣ ORPO 长度风险（关键）
 # =========================
-max_seq_length = 4096  # 你训练时用的
+max_seq_length = 4480  # 你训练时用的
 
 overflow = 0
 
