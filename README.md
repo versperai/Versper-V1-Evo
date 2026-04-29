@@ -46,6 +46,13 @@ hf auth login
 mkdir -p data && hf download versperai/Versper-V1-Evo-ORPO-GPT5.5-Think-Recursive-25k --repo-type dataset --local-dir . && cd ..
 ```
 
+`[1]` 
+
+`[2]`
+
+`[3]` check_data.py
+
+
 
 
 You are helping create supervised fine-tuning data for a new LLM called **Versper-V1-Evo**.
