@@ -3,21 +3,25 @@ import torch
 from datasets import load_dataset
 from trl import ORPOTrainer, ORPOConfig
 
-# ==============================================
-# 1️⃣ 加载模型
-# ==============================================
+# =====================================================
+# 1️⃣ Load Model (4bit + BF16)
+# =====================================================
 model, tokenizer = FastLanguageModel.from_pretrained(
     model_name="/root/yijia-tmp/model",
-    max_seq_length=2048,
+    max_seq_length=4480,  # ⭐ full context
     load_in_4bit=True,
     dtype=torch.bfloat16,
 )
-tokenizer.fix_mistral_regex = True
-FastLanguageModel.for_inference(model)
 
-# ==============================================
-# 2️⃣ LoRA
-# ==============================================
+# tokenizer patch (Mistral regex warning fix)
+tokenizer.fix_mistral_regex = True
+
+# ⚠️ training mode (not inference)
+FastLanguageModel.for_training(model)
+
+# =====================================================
+# 2️⃣ LoRA (48GB optimized)
+# =====================================================
 model = FastLanguageModel.get_peft_model(
     model,
     r=16,
@@ -37,65 +41,91 @@ model = FastLanguageModel.get_peft_model(
     random_state=3407,
 )
 
-# ==============================================
-# 3️⃣ Dataset
-# ==============================================
+# =====================================================
+# 3️⃣ Load Local Dataset
+# =====================================================
 dataset = load_dataset(
-    "versperai/Versper-V1-Evo-ORPO-GPT5.5-Think-Recursive-25k", split="train"
+    "json", data_files="/root/yijia-tmp/data/orpo_train.jsonl", split="train"
 )
 
 
+# 不做截断（你已经分析过长度分布）
 def preprocess(example):
-    # 自动裁切防显存炸
     return {
-        "prompt": example["prompt"][:2000],
-        "chosen": example["chosen"][:2000],
-        "rejected": example["rejected"][:2000],
+        "prompt": example["prompt"],
+        "chosen": example["chosen"],
+        "rejected": example["rejected"],
     }
 
 
 dataset = dataset.map(preprocess)
 
-# ==============================================
-# 4️⃣ ORPO Trainer 配置
-# ==============================================
+# =====================================================
+# 4️⃣ ORPO Config (48GB 4090 full config)
+# =====================================================
 trainer = ORPOTrainer(
     model=model,
     tokenizer=tokenizer,
     train_dataset=dataset,
     args=ORPOConfig(
-        max_length=2048,
-        max_prompt_length=1024,
-        max_completion_length=1024,
+        # =========================
+        # 🧠 context config (FULL 4480)
+        # =========================
+        max_length=4480,
+        max_prompt_length=1280,
+        max_completion_length=3264,
+        # =========================
+        # 💾 memory config
+        # =========================
         per_device_train_batch_size=1,
         gradient_accumulation_steps=8,
+        # =========================
+        # ⚖️ ORPO core
+        # =========================
         beta=0.1,
+        # =========================
+        # 🚀 optimizer
+        # =========================
         optim="adamw_8bit",
+        # =========================
+        # 📉 learning
+        # =========================
         learning_rate=2e-5,
         lr_scheduler_type="linear",
+        # =========================
+        # 🧾 logging (SwanLab)
+        # =========================
         logging_steps=5,
-        report_to="swanlab",  # ⭐ 这里启用 SwanLab
-        swanlab_project="Versper-V1-ORPO",  # SwanLab项目名
-        swanlab_entity="HaibaraYuki",  # SwanLab账户名
+        report_to="swanlab",
+        swanlab_project="Versper-V1-ORPO",
+        swanlab_entity="HaibaraYuki",
+        # =========================
+        # 💾 saving
+        # =========================
         save_steps=200,
         save_total_limit=2,
-        max_steps=3000,
+        # =========================
+        # 🚀 training scale
+        # =========================
+        max_steps=3125,
         bf16=True,
         output_dir="./orpo_output",
     ),
 )
 
-# ==============================================
-# 5️⃣ 训练
-# ==============================================
+# =====================================================
+# 5️⃣ Train
+# =====================================================
 trainer.train()
 
-# ==============================================
-# 6️⃣ 保存 LoRA + Merge
-# ==============================================
+# =====================================================
+# 6️⃣ Save (LoRA + merged model)
+# =====================================================
 model.save_pretrained("./orpo_output/lora")
 tokenizer.save_pretrained("./orpo_output/lora")
 
 model = model.merge_and_unload()
 model.save_pretrained("./orpo_output/merged")
 tokenizer.save_pretrained("./orpo_output/merged")
+
+print("✅ ORPO training finished successfully!")
