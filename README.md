@@ -1,7 +1,7 @@
 # Versper-V1-Evo: An Autonomous Agentic Model that Operates in Iterative Execution Loops.
 
 <div align="center">
-  <img src="docs/VersperAI_Banner.png" alt="Versper-V1-Evo">
+  <img src="assets/VersperAI_Banner.png" alt="Versper-V1-Evo">
 </div>
 
 ## 1. Quick start
