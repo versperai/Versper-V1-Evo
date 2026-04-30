@@ -15,9 +15,11 @@ uv venv && uv sync && source .venv/bin/activate
 ### Fetch Data: Versper-V1-Evo-ORPO-GPT5.5-Think-Recursive-25k
 
 > Q1: Why use recursisve code & scientific think long data, not just ordinary chat short data?
+
 > A1: just code & scientific have longest tokens, biggest value density, closest relational connection
 
 > Q2: How to set data shema to let model evolution to what we need feature
+
 > A2: i want model can self-evolution in iterative loop can task-oriented learning so use ORPO + Process Reward Modeling and use prompt + chosen + rejected as data schema 
 
 ```bash
@@ -61,6 +63,7 @@ prompt = tokenizer.apply_chat_template(
 ## 4. Train - trainer/train_orpo.py
 
 > Watch the orpo-evo post-trian logs in [Training  Metric Logging](https://swanlab.cn/@HaibaraYuki/Versper-V1-ORPO/runs)
+
 > scientific exploration : pre-train : post-train = 3 : 1 : 1
 
 
