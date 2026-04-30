@@ -72,7 +72,15 @@ prompt = tokenizer.apply_chat_template(
 
 ## 4. Train - trainer/train_orpo.py
 
-> Watch the orpo-evo post-trian logs in [Training  Metric Logging](https://swanlab.cn/@HaibaraYuki/Versper-V1-ORPO/runs) 
+> Watch the orpo-evo post-trian logs in [Training  Metric Logging](https://swanlab.cn/@HaibaraYuki/Versper-V1-ORPO/runs)  
 > scientific exploration : pre-train : post-train = 3 : 1 : 1
+
+> batch_size	4, grad_accum 3 => total batch 12 trained in two 4090 48G VAGM
+
+### 1. 125 Steps
+
+<div align="center">
+  <img src="assets/125steps.png" alt="125steps">
+</div>
 
 
