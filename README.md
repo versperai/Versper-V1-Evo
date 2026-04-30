@@ -1,49 +1,22 @@
-# Versper-V1-Evo
+# Versper-V1-Evo: An Autonomous Agentic Model that Operates in Iterative Execution Loops.
 
+<div align="center">
+  <img src="docs/VersperAI_Banner.png" alt="Versper-V1-Evo">
+</div>
 
-## Quantization
-
-```bash
-mkdir -p model && cd model && hf download Jackrong/Qwopus3.6-27B-v1-preview --local-dir . && cd ..
-
-apt update && apt install -y mergerfs
-# mkdir -p /mnt/storage
-# mergerfs /root:/root/yijia-tmp /mnt/storage
-
-开机自动挂载（如果长期用）
-
-/etc/fstab
-
-加入：
-
-/root:/root/yijia-tmp /mnt/storage fuse.mergerfs defaults,allow_other,use_ino 0 0
-
-里可写文件，系统会自动选择有空间的盘
-
-
-但是云服务器 mergerfs 不了
-
-除非宿主机管理员给你：
-
-开启 FUSE
-挂载 /dev/fuse
-特权容器
-```
 
 ## Quick start
 
+### Data: Versper-V1-Evo-ORPO-GPT5.5-Think-Recursive-25k
+
 ```bash
-pip install torch==2.10.0+cu128 torchvision==0.25.0+cu128 torchaudio==2.10.0+cu128 \
---index-url https://download.pytorch.org/whl/cu128
+curl -LsSf https://hf.co/cli/install.sh | bash && hf auth login && mkdir -p data && hf download versperai/Versper-V1-Evo-ORPO-GPT5.5-Think-Recursive-25k --repo-type dataset --local-dir . && cd ..
+```
 
-pip install unsloth unsloth_zoo
+###  
 
-
-curl -LsSf https://hf.co/cli/install.sh | bash
-
-hf auth login
-
-mkdir -p data && hf download versperai/Versper-V1-Evo-ORPO-GPT5.5-Think-Recursive-25k --repo-type dataset --local-dir . && cd ..
+```bash
+mkdir -p model && cd model && hf download Jackrong/Qwopus3.6-27B-v1-preview --local-dir . && cd ..
 ```
 
 `[1]` 
