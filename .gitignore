@@ -11,7 +11,5 @@ wheels/
 *.jsonl*
 *.json*
 
-model/*
-
 # Virtual environments
 .venv
