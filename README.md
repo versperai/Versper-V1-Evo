@@ -15,7 +15,7 @@ uv venv && uv sync && source .venv/bin/activate
 ### Fetch Data: Versper-V1-Evo-ORPO-GPT5.5-Think-Recursive-25k
 
 > Q1: Why use recursisve code & scientific think long data, not just ordinary chat short data?  
-> A1: just code & scientific have longest tokens, biggest value density, closest relational connection
+> A1: just code & scientific have longest tokens, biggest value density, closest relational connection, and have deterministic preference for right-wrong rewards.
 
 > Q2: How to set data shema to let model evolution to what we need feature  
 > A2: i want model can self-evolution in iterative loop can task-oriented learning so use ORPO + Process Reward Modeling and use prompt + chosen + rejected as data schema 
@@ -73,8 +73,7 @@ prompt = tokenizer.apply_chat_template(
 ## 4. Train - trainer/train_orpo.py
 
 > Watch the orpo-evo post-trian logs in [Training  Metric Logging](https://swanlab.cn/@HaibaraYuki/Versper-V1-ORPO/runs)  
-> scientific exploration : pre-train : post-train = 3 : 1 : 1
-
+> scientific exploration : pre-train : post-train = 3 : 1 : 1  
 > batch_size	4, grad_accum 3 => total batch 12 trained in two 4090 48G VAGM
 
 ### 4.1 Steps - 125
@@ -89,4 +88,29 @@ prompt = tokenizer.apply_chat_template(
 > **Log Probabilities:** Asymmetric growth (chosen > rejected) confirms the model prioritizes high-quality outputs over mere imitation.  
 > **Conclusion:** Training is optimal. Convergence is expected around step 1500.  
 
-### 4.2 
+### 4.2 Explain the two curves show an upward trend followed by a downward trend
+
+<div align="center">
+  <img src="assets/train_orpo_log/curves_rise_then_down.png" alt="curves_rise_then_down">
+</div>
+
+> The logits of chosen and rejected all rise - Training startup in Warmup the learnning rate line raise, model learn date distribution fastly.  
+> Logits of the chosen are consistently higher than those of the rejected - orpo make model preference to chosen.
+
+### 4.3 Steps - 200
+
+<div align="center">
+  <img src="assets/train_orpo_log/200steps.png" alt="200steps">
+</div>
+
+> train/rewards/margins consistently rise - preference chosen  
+> NLL Loss consistently down - the sft incurs no loss in language modeling preference
+
+### 4.4 After all down, just chosen raise
+
+<div align="center">
+  <img src="assets/train_orpo_log/rejected_down_chosen_raise.png" alt="200steps">
+</div>
+
+> Optimizer Dynamics, after warmup, adamw start update weight, enhance training stability, the model tends to compress the output magnitude of the final Linear Head.  
+> The "Annealing" Effect of Probability Distribution: In ORPO, the model must simultaneously minimize NLL Loss (SFT loss) and ORPO loss. When competition between these two objectives occurs, the model finds that reducing the absolute values of overall Logits allows it to more effectively utilize the non-linear region of the Softmax function, thereby amplifying the relative probability ratio between chosen and rejected responses.  
