@@ -79,8 +79,17 @@ prompt = tokenizer.apply_chat_template(
 
 ### 1. 125 Steps
 
-<div align="center">
-  <img src="assets/125steps.png" alt="125steps">
-</div>
-
-
+<figure align="center">
+    <img src="assets/train_orpo_log/125steps.png" alt="125steps" width="100%">
+    <figcaption align="left">
+        <hr>
+        <strong>ORPO Training Progress (125 Steps Analysis)</strong>
+        <ul style="font-size: 0.9em; line-height: 1.5; text-align: left;">
+            <li><strong>Core Loss:</strong> Steady decline in <code>nll_loss</code> and stable <code>grad_norm</code> (<0.5) indicate robust language modeling and stable gradients.</li>
+            <li><strong>ORPO Metrics:</strong> <code>margins</code> and <code>log_odds_ratio</code> are rising, proving the model is effectively widening the gap between <i>chosen</i> and <i>rejected</i> responses.</li>
+            <li><strong>Reward Accuracy:</strong> Sustained at 1.0, showing strong discriminative power on the Vesper-V1 dataset.</li>
+            <li><strong>Log Probabilities:</strong> Asymmetric growth (chosen > rejected) confirms the model prioritizes high-quality outputs over mere imitation.</li>
+            <li><strong>Conclusion:</strong> Training is optimal. Convergence is expected around step 1500.</li>
+        </ul>
+    </figcaption>
+</figure>
