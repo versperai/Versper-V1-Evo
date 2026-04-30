@@ -77,15 +77,16 @@ prompt = tokenizer.apply_chat_template(
 
 > batch_size	4, grad_accum 3 => total batch 12 trained in two 4090 48G VAGM
 
-### 1. 125 Steps
+### 4.1 Steps - 125
 
 <div align="center">
   <img src="assets/train_orpo_log/125steps.png" alt="125steps">
 </div>
 
-> **Core Loss:** Steady decline in <code>nll_loss</code> and stable <code>grad_norm</code> (<0.5) indicate robust language modeling and stable gradients.
-> **ORPO Metrics:** <code>margins</code> and <code>log_odds_ratio</code> are rising, proving the model is effectively widening the gap between <i>chosen</i> and <i>rejected</i> responses.
-> **Reward Accuracy:** Sustained at 1.0, showing strong discriminative power on the Vesper-V1 dataset.
-> **Log Probabilities:** Asymmetric growth (chosen > rejected) confirms the model prioritizes high-quality outputs over mere imitation.
-> **Conclusion:** Training is optimal. Convergence is expected around step 1500.
+> **Core Loss:** Steady decline in <code>nll_loss</code> and stable <code>grad_norm</code> (<0.5) indicate robust language modeling and stable gradients.  
+> **ORPO Metrics:** <code>margins</code> and <code>log_odds_ratio</code> are rising, proving the model is effectively widening the gap between <code>chosen</code> and <code>rejected</code> responses.  
+> **Reward Accuracy:** Sustained at 1.0, showing strong discriminative power on the Vesper-V1 dataset.  
+> **Log Probabilities:** Asymmetric growth (chosen > rejected) confirms the model prioritizes high-quality outputs over mere imitation.  
+> **Conclusion:** Training is optimal. Convergence is expected around step 1500.  
 
+### 4.2 
