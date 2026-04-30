@@ -47,6 +47,18 @@ for p, c, r in zip(prompt_lens, chosen_lens, rejected_lens):
         overflow += 1
 ```
 
+### Random Sample to make sure the data is complete and correct loaded 
+
+```python
+for _ in range(2):
+    ex = random.choice(data)
+
+    print("PROMPT:\n", ex["prompt"][:300])
+    print("\nCHOSEN:\n", ex["chosen"][:300])
+    print("\nREJECTED:\n", ex["rejected"][:300])
+    print("=" * 80)
+```
+
 ## 3. Eval - eval/inference.py
 
 ```python
@@ -62,7 +74,5 @@ prompt = tokenizer.apply_chat_template(
 
 > Watch the orpo-evo post-trian logs in [Training  Metric Logging](https://swanlab.cn/@HaibaraYuki/Versper-V1-ORPO/runs) 
 > scientific exploration : pre-train : post-train = 3 : 1 : 1
-
-
 
 
