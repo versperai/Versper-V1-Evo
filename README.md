@@ -193,7 +193,7 @@ When the model favors a "rejected" response, $\delta(d)$ accelerates parameter u
 ***
 #### **5. Meaning of $\beta$ (Your Configuration: $\beta=0.1$)**
 In the TRL implementation of ORPO, the loss function is defined as:
-$$\mathcal{L} = \mathcal{L}_{SFT} - \beta \cdot \log\sigma(\text{log\_odds\_ratio})$$
+$$\mathcal{L} = \mathcal{L}_{\text{SFT}} - \beta \cdot \log\sigma(\text{log\_odds\_ratio})$$
 *   **Higher $\beta$**: Stronger preference signal; the model more aggressively distinguishes between superior and inferior responses.
 *   **Lower $\beta$**: Insufficient preference learning.
 *   **Recommended Range**: The paper suggests $\beta \in [0.05, 0.2]$; your setting of **0.1** is within the optimal range.
